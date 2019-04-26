@@ -67,8 +67,6 @@
     <Compile Include="Assets\Match 3 Starter\Scripts\Effects\GUISizePingPong.cs" />
     <Compile Include="Assets\Match 3 Starter\Scripts\Managers\GameManager.cs" />
     <Compile Include="Assets\Match 3 Starter\Scripts\Managers\GUIManager.cs" />
-    <Compile Include="Assets\Match 3 Starter\Scripts\Managers\SFXManager.cs" />
-    <None Include="Assets\Match 3 Starter\Audio\Music\Attribution.txt" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>/Users/kertu/TLÜ/IV/Mobrakendus/GameMatch3/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
