@@ -33,7 +33,7 @@ public class Tile : MonoBehaviour {
 
 	private Vector2[] adjacentDirections = new Vector2[] { Vector2.up, Vector2.down, Vector2.left, Vector2.right };
 
-	void Awake() {
+    void Awake() {
 		render = GetComponent<SpriteRenderer>();
     }
 
@@ -70,8 +70,18 @@ public class Tile : MonoBehaviour {
             }
             else
             {
-                SwapSprite(previousSelected.render);
-                previousSelected.Deselect(); // 4
+                if (GetAllAdjacentTiles().Contains(previousSelected.gameObject))
+                { // 1
+                    SwapSprite(previousSelected.render); // 2
+                    previousSelected.ClearAllMatches();
+                    previousSelected.Deselect();
+                    ClearAllMatches();
+                }
+                else
+                { // 3
+                    previousSelected.GetComponent<Tile>().Deselect();
+                    Select();
+                }
             }
         }
     }
@@ -107,6 +117,51 @@ public class Tile : MonoBehaviour {
             adjacentTiles.Add(GetAdjacent(adjacentDirections[i]));
         }
         return adjacentTiles;
+    }
+
+    private List<GameObject> FindMatch(Vector2 castDir)
+    { // 1
+        List<GameObject> matchingTiles = new List<GameObject>(); // 2
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, castDir); // 3
+        while (hit.collider != null && hit.collider.GetComponent<SpriteRenderer>().sprite == render.sprite)
+        { // 4
+            matchingTiles.Add(hit.collider.gameObject);
+            hit = Physics2D.Raycast(hit.collider.transform.position, castDir);
+        }
+        return matchingTiles; // 5
+    }
+
+    private void ClearMatch(Vector2[] paths) // 1
+    {
+        List<GameObject> matchingTiles = new List<GameObject>(); // 2
+        for (int i = 0; i < paths.Length; i++) // 3
+        {
+            matchingTiles.AddRange(FindMatch(paths[i]));
+        }
+        if (matchingTiles.Count >= 2) // 4
+        {
+            for (int i = 0; i < matchingTiles.Count; i++) // 5
+            {
+                matchingTiles[i].GetComponent<SpriteRenderer>().sprite = null;
+            }
+            matchFound = true; // 6
+        }
+    }
+
+    private bool matchFound = false;
+    public void ClearAllMatches()
+    {
+        if (render.sprite == null)
+            return;
+
+        ClearMatch(new Vector2[2] { Vector2.left, Vector2.right });
+        ClearMatch(new Vector2[2] { Vector2.up, Vector2.down });
+        if (matchFound)
+        {
+            render.sprite = null;
+            matchFound = false;
+            SFXManager.instance.PlaySFX(Clip.Clear);
+        }
     }
 
 }
