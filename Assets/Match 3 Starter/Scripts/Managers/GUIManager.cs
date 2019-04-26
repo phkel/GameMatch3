@@ -34,11 +34,13 @@ public class GUIManager : MonoBehaviour {
 	public Text scoreTxt;
 	public Text moveCounterTxt;
 
-	private int score;
+    private int score, moveCounter;
 
-	void Awake() {
+    void Awake() {
 		instance = GetComponent<GUIManager>();
-	}
+        moveCounter = 60;
+        moveCounterTxt.text = moveCounter.ToString();
+    }
 
 	// Show the game over panel
 	public void GameOver() {
@@ -55,5 +57,33 @@ public class GUIManager : MonoBehaviour {
 
 		yourScoreTxt.text = score.ToString();
 	}
+
+    public int Score
+    {
+        get
+        {
+            return score;
+        }
+
+        set
+        {
+            score = value;
+            scoreTxt.text = score.ToString();
+        }
+    }
+
+    public int MoveCounter
+    {
+        get
+        {
+            return moveCounter;
+        }
+
+        set
+        {
+            moveCounter = value;
+            moveCounterTxt.text = moveCounter.ToString();
+        }
+    }
 
 }
