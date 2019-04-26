@@ -38,8 +38,7 @@ public class GUIManager : MonoBehaviour {
 
     void Awake() {
 		instance = GetComponent<GUIManager>();
-        moveCounter = 60;
-        moveCounterTxt.text = moveCounter.ToString();
+        moveCounter = 10;
     }
 
 	// Show the game over panel
@@ -82,8 +81,20 @@ public class GUIManager : MonoBehaviour {
         set
         {
             moveCounter = value;
+            if (moveCounter <= 0)
+            {
+                moveCounter = 0;
+                StartCoroutine(WaitForShifting());
+            }
             moveCounterTxt.text = moveCounter.ToString();
         }
+    }
+
+    private IEnumerator WaitForShifting()
+    {
+        yield return new WaitUntil(() => !BoardManager.instance.IsShifting);
+        yield return new WaitForSeconds(.25f);
+        GameOver();
     }
 
 }
