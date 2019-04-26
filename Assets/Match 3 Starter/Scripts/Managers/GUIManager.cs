@@ -41,7 +41,6 @@ public class GUIManager : MonoBehaviour {
         moveCounter = 10;
     }
 
-	// Show the game over panel
 	public void GameOver() {
 		GameManager.instance.gameOver = true;
 

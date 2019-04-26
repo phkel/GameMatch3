@@ -54,16 +54,16 @@ public class BoardManager : MonoBehaviour {
 			for (int y = 0; y < ySize; y++) {
 				GameObject newTile = Instantiate(tile, new Vector3(startX + (xOffset * x), startY + (yOffset * y), 0), tile.transform.rotation);
 				tiles[x, y] = newTile;
-                newTile.transform.parent = transform; // 1
+                newTile.transform.parent = transform;
 
-                List<Sprite> possibleCharacters = new List<Sprite>(); // 1
-                possibleCharacters.AddRange(characters); // 2
+                List<Sprite> possibleCharacters = new List<Sprite>(); 
+                possibleCharacters.AddRange(characters); 
 
-                possibleCharacters.Remove(previousLeft[y]); // 3
+                possibleCharacters.Remove(previousLeft[y]); 
                 possibleCharacters.Remove(previousBelow);
 
                 Sprite newSprite = possibleCharacters[Random.Range(0, possibleCharacters.Count)];
-                newTile.GetComponent<SpriteRenderer>().sprite = newSprite; // 3
+                newTile.GetComponent<SpriteRenderer>().sprite = newSprite;
 
                 previousLeft[y] = newSprite;
                 previousBelow = newSprite;
@@ -100,21 +100,21 @@ public class BoardManager : MonoBehaviour {
         int nullCount = 0;
 
         for (int y = yStart; y < ySize; y++)
-        {  // 1
+        {  
             SpriteRenderer render = tiles[x, y].GetComponent<SpriteRenderer>();
             if (render.sprite == null)
-            { // 2
+            { 
                 nullCount++;
             }
             renders.Add(render);
         }
 
         for (int i = 0; i < nullCount; i++)
-        { // 3
+        { 
             GUIManager.instance.Score += 50;
-            yield return new WaitForSeconds(shiftDelay);// 4
+            yield return new WaitForSeconds(shiftDelay);
             for (int k = 0; k < renders.Count - 1; k++)
-            { // 5
+            { 
                 renders[k].sprite = renders[k + 1].sprite;
                 renders[k + 1].sprite = GetNewSprite(x, ySize - 1);
             }
